@@ -10,7 +10,11 @@ const postSchema=new Schema({
         type:String,
         required:true,
         ref:'users'
-    }
+    },
+    likers:[{
+        type:String,
+        ref:'users'
+    }]
 },{
     writeConcern:{
         j:true,

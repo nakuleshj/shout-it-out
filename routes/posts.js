@@ -12,4 +12,4 @@ postRouter.route('/add').post((req,res)=>{
     }).save().then((post)=>res.status(200).json({message:'Post created'}))
     .catch(e=>res.status(500).json({message:e.toString()}));
 });
-modules.exports=postRouter
+module.exports=postRouter

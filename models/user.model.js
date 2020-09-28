@@ -18,7 +18,15 @@ const userSchema=new Schema({
         type:String,
         required:true,
         trim:true,
-    }
+    },
+    followers:[{
+        type:String,
+        ref:'users'
+    }],
+    following:[{
+        type:String,
+        ref:'users'
+    }]
 },{
     writeConcern:{
         j:true,
