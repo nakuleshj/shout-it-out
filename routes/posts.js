@@ -2,7 +2,7 @@ const postRouter=require('express').Router();
 const jwt=require('jsonwebtoken');
 let Post=require('../models/post.model');
 postRouter.route('/').get((req,res)=>{
-    Post.find().populate('postedBy').then((posts)=>res.status(200).json(posts))
+    Post.find().populate('postedBy likers').then((posts)=>res.status(200).json(posts))
     .catch((e)=>res.status(500).json({message:e.toString()}))
 });
 postRouter.route('/add').post((req,res)=>{

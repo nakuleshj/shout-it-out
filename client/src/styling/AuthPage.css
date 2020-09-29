@@ -1,0 +1,20 @@
+.login-background{
+    background:#d8ff00 ;
+}
+
+input.login-input:focus{
+    border: 1px solid #343A40;
+    box-shadow: none;
+}
+button.reg-button,
+button.auth-btn{
+    color:#d8ff00;
+    background-color: #343A40;
+    border: 1px solid #343A40;
+}
+button.reg-button:hover,
+button.auth-btn:hover{
+    color:#d8ff00;
+    background-color: #343A40;
+    border: 1px solid #343A40;
+}

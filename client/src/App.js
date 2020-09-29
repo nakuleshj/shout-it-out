@@ -1,13 +1,16 @@
 import React from 'react';
 import {BrowserRouter as Router,Route} from 'react-router-dom';
-import CustomNavbar from './components/customNavbar.component';
+import HomePage from './components/homePage.component';
+import AuthPage from './components/authPage.component';
 import 'bootstrap/dist/css/bootstrap.min.css';
 function App() {
   return (
     
     <Router>
       <Route path='/' exact component={()=>{
-        return <CustomNavbar/>
+        if(localStorage.getItem('token'))
+        return <AuthPage/>
+        return <HomePage/>
       }} />
     </Router>
   );

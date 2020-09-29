@@ -1,0 +1,43 @@
+.main-btn{
+    padding:10px;
+    background-color: #d8ff00;
+    border: 1px solid #343A40;
+    z-index: 1;
+    margin-left:-1px;
+}
+.main-btn:hover{
+    color:#d8ff00;
+    background-color: #343A40;
+    border: 1px solid #343A40;
+}
+textarea.tweet-area{
+    border-color: #343A40;
+}
+input.comment:focus{
+    border:none;
+    box-shadow: none;
+}
+textarea.tweet-area:focus{
+    border-color: #343A40;
+        box-shadow: none;
+}
+
+.like-btn{
+    font-size: 24px;
+    text-decoration: none;
+    background: none;
+    border:none;
+    color: #d8ff00;
+}
+button:focus, .like-btn:focus {outline: none;}
+.comment-button{
+    background-color: #d8ff00;
+    border: 1px solid #d8ff00;
+    z-index: 1;
+    color: #343A40;
+    box-shadow: none;
+}
+.comment-button:active{
+    box-shadow: none;
+    border:1px solid #d8ff00;
+}

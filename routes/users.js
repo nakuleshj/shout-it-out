@@ -20,10 +20,13 @@ userRouter.route('/register').post(async (req,res)=>{
         {
             email:req.body.email,
             password:await bCrypt.hash(req.body.password,10),
-            username:req.body.username
+            fullname:req.body.fullname
         }
     ).save().then((user)=>{
         res.status(201).json({'token':jwt.sign({'userID':user._id},process.env.JWT_SECRET_KEY)})
     }).catch(e=>res.status(500).json({'message':e.toString()}));
 });
+userRouter.route('/').get((req,res)=>{
+    User.find().then((users)=>res.status(200).json(users))
+})
 module.exports=userRouter;
