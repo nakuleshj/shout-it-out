@@ -8,8 +8,9 @@ function App() {
     
     <Router>
       <Route path='/' exact component={()=>{
-        if(localStorage.getItem('token'))
+        if(!localStorage.getItem('token'))
         return <AuthPage/>
+        else
         return <HomePage/>
       }} />
     </Router>

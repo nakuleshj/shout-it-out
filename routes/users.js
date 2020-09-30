@@ -7,7 +7,7 @@ userRouter.route('/login').post((req,res)=>{
         if(user.length==1)
         {
             if(bCrypt.compare(req.body.password,user[0].password))
-                res.status(200).json({token:jwt.sign({'userID':user[0]._id},process.env.JWT_SECRET_KEY)})
+                res.status(200).json({token:jwt.sign({'userID':user[0]._id},process.env.JWT_SECRET_KEY),userID:user[0]._id})
             else
                 res.status(401).json({message:'Email/Password is Invalid'});
         }
@@ -23,8 +23,10 @@ userRouter.route('/register').post(async (req,res)=>{
             fullname:req.body.fullname
         }
     ).save().then((user)=>{
-        res.status(201).json({'token':jwt.sign({'userID':user._id},process.env.JWT_SECRET_KEY)})
-    }).catch(e=>res.status(500).json({'message':e.toString()}));
+        res.status(201).json({'token':jwt.sign({'userID':user._id},process.env.JWT_SECRET_KEY),userID:user._id})
+    }).catch(e=>{
+        console.log(e.toString());
+        res.status(500).json({'message':e.toString()})});
 });
 userRouter.route('/').get((req,res)=>{
     User.find().then((users)=>res.status(200).json(users))

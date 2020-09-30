@@ -14,6 +14,10 @@ const postSchema=new Schema({
     likers:[{
         type:String,
         ref:'users'
+    }],
+    comments:[{
+        type:String,
+        ref:'comments'
     }]
 },{
     writeConcern:{
