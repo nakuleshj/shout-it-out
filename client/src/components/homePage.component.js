@@ -10,6 +10,8 @@ export default function HomePage () {
     const [newPostContent,setNewPostContent]=useState('');
     const [commentModalOpen,setCommentModalOpen]=useState(false);
     const [posts,setPosts]=useState([]);
+    const [currentComments,setCurrentComments]=useState([]);
+    const [commentContent,setComment]=useState({});
     useEffect(() => {
         axios.get('api/post',{
             headers:{
@@ -21,7 +23,6 @@ export default function HomePage () {
             setPosts(prevState=>{return [...prevState,sentPost]})
         )}).catch((e)=>console.log(e.toString()));
     },[]);
-    
     return (
         <>
         <Modal scrollable show={commentModalOpen} onHide={()=>{
@@ -31,12 +32,15 @@ export default function HomePage () {
                 <Modal.Title>Comments</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                
+                <ul>
+                    {currentComments.map((comment)=>{
+                        return<li><p><b>{comment.commentedBy.fullname}</b>&nbsp;{comment.commentContent}</p></li>
+                    })}
+                    </ul>
             </Modal.Body>
         </Modal>
             <CustomNavbar />
             <div className='container-fluid'>
-                
                 <div className='row'>
                     <div className='col-sm-7 mx-auto'>
                         <Form className='my-3' onSubmit={(e)=>{e.preventDefault();
@@ -63,6 +67,7 @@ export default function HomePage () {
                             
                             posts.map(post=>
                             {
+                                let timestamp=new Date(post.createdAt);
                             return <div key={post._id} className='post-container rounded-lg shadow-lg bg-dark d-flex flex-column text-light mb-2' >
                             <div className='d-flex flex-row px-3 pt-2 border-dark'>
 
@@ -71,12 +76,27 @@ export default function HomePage () {
                             <b>{post.postedBy.fullname}</b>
                             <p>{post.postedBy.email}</p>
                                 </div>
+                            <div className='ml-auto text-light'>{timestamp.getDate()+'/'+timestamp.getMonth()+'/'+timestamp.getFullYear()}</div>
                             </div>
-                            <div className='px-3'>
+                            <div className='px-3 pb-2'>
                                 {post.content}
                             </div>
-                            <form>
+                            <form onSubmit={(e)=>{
+                                e.preventDefault();
+                                axios.post('api/post/comment/'+post._id,{
+                                    commentContent: commentContent[post._id]
+                                },{
+                                    headers:{
+                                        authorization:'Bearer '+localStorage.getItem('token')
+                                    }
+                                }).then((res)=>{
+                                    if(res.status==='201'){
+                                        window.location.reload();
+                                    }
+                                })
+                            }}>
                             <div className='d-flex flex-row px-2 py-2 bg-secondary rounded-bottom'>
+                                
                             <button type='button' className='like-btn' onClick={()=>{
                                 if(!post.likers.find((liker)=>{return liker===localStorage.getItem('userID')}))
                                    axios.post('api/post/like/'+post._id,{},{
@@ -106,10 +126,20 @@ export default function HomePage () {
 
                                 }}><i className={post.likers.find((liker)=>{return liker===localStorage.getItem('userID')})?"fa fa-heart":"fa fa-heart-o"}></i></button>
                                 <button type='button' className='like-btn align-text-bottom px-3' onClick={()=>{
+                                    setCurrentComments(post.comments);
                                     setCommentModalOpen(true);
                                 }}><i className={"fa fa-comments-o"}></i></button>
                             <InputGroup >
-                                <input className='comment form-control' placeholder={'Reply to Nakulesh J'}/>
+                                <input className='comment form-control' placeholder={'Reply to '+ post.postedBy.fullname} onChange={
+                                    (e)=>{
+                                        const typedValue=e.target.value;
+                                        setComment((comments)=>{
+                                            const newComments={...comments};
+                                            newComments[post._id]=typedValue;
+                                            return newComments;
+                                            });
+                                    }
+                                }/>
                                 <InputGroup.Append>
                                 <button className='comment-button rounded-right px-2'>Reply</button>
                                 </InputGroup.Append>

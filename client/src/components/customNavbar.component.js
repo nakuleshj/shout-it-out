@@ -12,12 +12,16 @@ export default class CustomNavbar extends Component{
             <Navbar.Brand href="#home"><img src='/logo.png' alt='Logo' width="40"
         height="40"
         className="d-inline-block align-top"/></Navbar.Brand>
-            <Nav className="mr-auto">
-            <Nav.Link>Home</Nav.Link>
-              <Nav.Link href='/home'>Features</Nav.Link>
-              <Nav.Link>Pricing</Nav.Link>
+        
+            
+            
+            <Nav className="ml-auto">
+              <Nav.Link onClick={()=>{
+                localStorage.removeItem('token');
+                localStorage.removeItem('userID');
+                window.location='/';
+              }}>Logout</Nav.Link>
             </Nav>
-           
           </Navbar>
         );
     }
