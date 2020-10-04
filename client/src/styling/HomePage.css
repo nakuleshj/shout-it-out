@@ -13,13 +13,33 @@
 textarea.tweet-area{
     border-color: #343A40;
 }
+.attachFile{
+    cursor:pointer;
+
+}
+.attachFile input[type="file"]{
+    display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  cursor: pointer;
+}
+.delete-post{
+    cursor: pointer;
+    font-size: larger;
+}
+.delete-post:hover{
+    color:#d8ff00;
+}
 input.comment:focus{
     border:none;
     box-shadow: none;
 }
 textarea.tweet-area:focus{
     border-color: #343A40;
-        box-shadow: none;
+    box-shadow: none;
 }
 
 .like-btn{

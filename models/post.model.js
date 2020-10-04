@@ -6,6 +6,10 @@ const postSchema=new Schema({
         type:String,
         required:true
     },
+    image:{
+        type:String,
+        ref:'images'
+    },
     postedBy:{
         type:String,
         required:true,

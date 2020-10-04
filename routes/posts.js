@@ -1,9 +1,12 @@
 const postRouter=require('express').Router();
 const jwt=require('jsonwebtoken');
+const multer  = require('multer');
+const upload=multer({'dest':'./public/uploads/'});
+const fs=require('fs');
 let Post=require('../models/post.model');
 let Comment=require('../models/comment.model');
+let Image=require('../models/images.model');
 postRouter.use((req,res,next)=>{
-    
     if(req.header('authorization'))
     jwt.verify(req.header('authorization').split(' ')[1],process.env.JWT_SECRET_KEY,(err,user)=>{
         if (err) {
@@ -11,12 +14,31 @@ postRouter.use((req,res,next)=>{
             return res.sendStatus(403);
         }
         req.userID = user.userID;
-        // console.log(user.userID);
         next();
     });
     else {
         res.sendStatus(401);
     }
+});
+
+postRouter.route('/media').post(upload.single('postImage'),(req,res)=>{
+    console.log(req.file.path)
+    var img = fs.readFileSync(req.file.path);
+    var encode_image = img.toString('base64');
+    Image({
+        contentType:req.file.mimetype,
+        data:img
+    }).save().then((newImg)=>{
+        console.log(newImg._id);
+        Post({
+            postedBy:req.userID,
+            content:req.body.content,
+            image:newImg._id
+        }).save().then(()=>{
+            res.sendStatus(201);
+        })
+    });
+    
 });
 postRouter.route('/').get((req,res)=>{
     Post.find().populate('postedBy').populate({path:'comments',populate:'commentedBy'}).then((posts)=>res.status(200).json(posts))
@@ -29,6 +51,14 @@ postRouter.route('/like/:postID').post((req,res)=>{
         else
         res.sendStatus(201);
     })
+});
+postRouter.route('/:postID').delete(async (req,res)=>{
+    // const post=await Post.findById(req.params.postID);
+    Post.findByIdAndDelete(req.params.postID).then((post)=>{
+        Comment.deleteMany({_id:post.comments}).then(()=>{
+            res.sendStatus(200);
+        }).catch((e)=>{res.sendStatus(500)});
+    }).catch((e)=>{res.sendStatus(500)});
 });
 postRouter.route('/comment/:postID').post(async (req,res)=>{
     const newComment=new Comment({
