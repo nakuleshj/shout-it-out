@@ -8,6 +8,10 @@ const userSchema=new Schema({
         required:true,
         trim:true,
     },
+    avatar:{
+        type:String,
+        ref:'images'
+    },
     email:{
         type:String,
         unique:true,

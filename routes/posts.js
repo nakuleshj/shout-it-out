@@ -35,6 +35,7 @@ postRouter.route('/media').post(upload.single('postImage'),(req,res)=>{
             content:req.body.content,
             imageRef:newImg._id
         }).save().then(()=>{
+            fs.unlinkSync(req.file.path);
             res.sendStatus(201);
         })
     });
