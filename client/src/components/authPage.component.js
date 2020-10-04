@@ -13,7 +13,7 @@ export default function AuthPage(){
                 <div className='col-md-6 my-2 mx-auto'>
                     <img src='logo.png' className="img-fluid mx-auto d-block" width='200' height='200' alt='Shout It Out'/>
                     <div className='row bg-white p-5 shadow-lg'>
-                        <div className='col-md-6 border-right pr-5'>
+                        <div className='col-lg-6 border-md-right pr-lg-5'>
                     <h1 className=''><strong>Login</strong></h1>
                     <form onSubmit={(e)=>{
                             e.preventDefault();
@@ -35,7 +35,7 @@ export default function AuthPage(){
                         
                     </form>
                     </div>
-                    <div className='col-md-6 pl-5'>
+                    <div className='col-lg-6 pl-lg-5 mt-lg-0 mt-sm-3'>
                     <h1 className=''><strong>Register</strong></h1>
 
                     <form onSubmit={(e)=>{e.preventDefault();axios.post('api/auth/register',{

@@ -27,13 +27,13 @@ postRouter.route('/media').post(upload.single('postImage'),(req,res)=>{
     var encode_image = img.toString('base64');
     Image({
         contentType:req.file.mimetype,
-        data:img
+        data:encode_image
     }).save().then((newImg)=>{
         console.log(newImg._id);
         Post({
             postedBy:req.userID,
             content:req.body.content,
-            image:newImg._id
+            imageRef:newImg._id
         }).save().then(()=>{
             res.sendStatus(201);
         })
@@ -41,7 +41,7 @@ postRouter.route('/media').post(upload.single('postImage'),(req,res)=>{
     
 });
 postRouter.route('/').get((req,res)=>{
-    Post.find().populate('postedBy').populate({path:'comments',populate:'commentedBy'}).then((posts)=>res.status(200).json(posts))
+    Post.find().populate('postedBy imageRef').populate({path:'comments',populate:'commentedBy'}).then((posts)=>res.status(200).json(posts))
     .catch((e)=>res.status(500).json({message:e.toString()}))
 });
 postRouter.route('/like/:postID').post((req,res)=>{

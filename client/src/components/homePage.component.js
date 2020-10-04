@@ -44,6 +44,8 @@ export default function HomePage () {
             formData.append('postImage',file);
             axios.post('/api/post/media',formData,config).then((res)=>{
                 console.log(res.status);
+                setShowPhotoUploadModal(false);
+                getPosts();
             });
         }}>
             <Modal.Header closeButton>
@@ -62,7 +64,7 @@ export default function HomePage () {
             <CustomNavbar />
             <div className='container-fluid'>
                 <div className='row'>
-                    <div className='col-sm-7 mx-auto'>
+                    <div className='col-lg-7 mx-auto'>
                         <Form className='my-3' onSubmit={(e)=>{e.preventDefault();
                         axios.post('api/post/add',{
                             content:newPostContent
@@ -117,6 +119,9 @@ export default function HomePage () {
                             </div>
                             <div className='px-3 pb-1'>
                                 {post.content}
+                                {
+                                    post.imageRef?<img className='rounded mx-auto d-block' style={{maxWidth: '70vw'}} src={"data:"+post.imageRef.contentType+";base64,"+post.imageRef.data} alt='newPostLOL'/>:null
+                                }
                             </div>
                             <div className='text-light px-3 small pb-2'>{timestamp.getDate()+'/'+timestamp.getMonth()+'/'+timestamp.getFullYear()}</div>
                             <form onSubmit={(e)=>{
