@@ -6,6 +6,18 @@ input.login-input:focus{
     border: 1px solid #343A40;
     box-shadow: none;
 }
+.attachFile{
+    cursor:pointer;
+}
+.attachFile input[type="file"]{
+    display: none;
+  /* position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  cursor: pointer; */
+}
 button.reg-button,
 button.auth-btn{
     color:#d8ff00;

@@ -7,6 +7,8 @@ export default function AuthPage(){
     const [registerEmail,setRegisterEmail]=useState('');
     const [registerPassword,setRegisterPassword]=useState('');
     const [registerName,setRegisterName]=useState('')
+    const [pickedImage,setPickedImage]=useState('');
+    const [avatarFile,setAvatarFile]=useState(null);
     return(
         <div className='container-fluid h-100 login-background'>
             <div className='row h-100'>
@@ -38,10 +40,17 @@ export default function AuthPage(){
                     <div className='col-lg-6 pl-lg-5 mt-lg-0 mt-sm-3'>
                     <h1 className=''><strong>Register</strong></h1>
 
-                    <form onSubmit={(e)=>{e.preventDefault();axios.post('api/auth/register',{
-                        fullname:registerName,
-                        email:registerEmail,
-                        password:registerPassword
+                    <form onSubmit={(e)=>{e.preventDefault();
+                    const formData=new FormData();
+                    formData.append('avatar',avatarFile)
+                    formData.append('fullname',registerName);
+                    formData.append('email',registerEmail);
+                    formData.append('password',registerPassword);
+                    axios.post('api/auth/register',formData,{
+                        headers:{
+                            'content-type':'multipart/form-data'
+                        }
+                        
                     }).then((res)=>{
                         localStorage.setItem('token',res.data.token);
                         localStorage.setItem('userID',res.data.userID);
@@ -49,6 +58,17 @@ export default function AuthPage(){
                     })
 
                         }}>
+                            <img src={avatarFile?pickedImage:'/avatar.png'} alt='Logo' className='rounded d-block mx-auto' height="100" />
+                            <label className='attachFile d-block mx-auto text-center pt-1' >
+                        <input type='file' accept='.png,.jpg,.jpeg' onChange={(e)=>{
+                            if (e.target.files && e.target.files[0])
+                            {
+                                setAvatarFile(e.target.files[0]);
+                                
+                                setPickedImage(URL.createObjectURL(e.target.files[0]));
+                            }
+                            
+                        }}/><b>Add Profile Picture</b></label>
                         <input className='form-control my-2 login-input' placeholder='Full Name' onChange={(e)=>{
                             setRegisterName(e.target.value);
                         }}/>
@@ -58,6 +78,7 @@ export default function AuthPage(){
                         <input className='form-control mb-2 login-input' placeholder='Password' type='password' onChange={(e)=>{
                             setRegisterPassword(e.target.value);
                         }}/>
+                        
                         <button className='btn btn-block reg-button'><b>Register</b></button>
                     </form>
                     </div>

@@ -1,5 +1,6 @@
 const userRouter=require('express').Router();
 let User=require('../models/user.model');
+let Image=require('../models/images.model');
 const jwt=require('jsonwebtoken');
 const bCrypt=require('bcrypt');
 const multer=require('multer');
@@ -18,6 +19,11 @@ userRouter.route('/login').post((req,res)=>{
         res.status(401).json({message:'Email/Password is Invalid'});
     });
 });
+userRouter.route('/getProfilePic/:userId').get((req,res)=>{
+    User.findById(req.params.userId).populate('avatar').then((user)=>{
+        res.json({imageSrc:'data:'+user.avatar.contentType+';base64,'+user.avatar.data});
+    })
+})
 userRouter.route('/register').post(upload.single('avatar'),async (req,res)=>{
     const img=fs.readFileSync(req.file.path);
     const imageDoc=await Image({
@@ -32,12 +38,13 @@ userRouter.route('/register').post(upload.single('avatar'),async (req,res)=>{
             avatar:imageDoc._id
         }
     ).save().then((user)=>{
+        fs.unlinkSync(req.file.path);
         res.status(201).json({token:jwt.sign({'userID':user._id},process.env.JWT_SECRET_KEY),userID:user._id})
     }).catch(e=>{
         console.log(e.toString());
         res.status(500).json({'message':e.toString()})});
 });
-userRouter.route('/').get((req,res)=>{
-    User.find().then((users)=>res.status(200).json(users))
-})
+// userRouter.route('/').get((req,res)=>{
+//     User.find().then((users)=>res.status(200).json(users))
+// })
 module.exports=userRouter;

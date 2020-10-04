@@ -93,7 +93,7 @@ export default function HomePage () {
                             setFile(e.target.files[0]);   
                             setShowPhotoUploadModal(true);}
                         }}/>
-                        <i className='fa fa-camera'></i>{file!==null?file.length:null}
+                        <i className='fa fa-camera'></i>
                         </label>
                         {
                             posts.map(post=>
@@ -101,7 +101,7 @@ export default function HomePage () {
                                 let timestamp=new Date(post.createdAt);
                                 return <div key={post._id} className='post-container rounded-lg shadow-lg bg-dark d-flex flex-column text-light mb-2' >
                                 <div className='d-flex flex-row px-3 pt-2 border-dark'>
-                                    <img src='/avatar.png' alt='Logo' className='rounded user-profile-pic mr-2' width="50" height="50" />
+                                    <img src={post.postedBy.avatar?"data:"+post.postedBy.avatar.contentType+";base64,"+post.postedBy.avatar.data:'/avatar.png'} alt='Logo' className='rounded user-profile-pic mr-2' width="50" height="50" />
                                     <div className='d-flex flex-column pl-1'>
                                         <b>{post.postedBy.fullname}</b>
                                         <p>{post.postedBy.email}</p>
