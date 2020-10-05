@@ -44,7 +44,8 @@ userRouter.route('/register').post(upload.single('avatar'),async (req,res)=>{
         console.log(e.toString());
         res.status(500).json({'message':e.toString()})});
 });
-// userRouter.route('/').get((req,res)=>{
-//     User.find().then((users)=>res.status(200).json(users))
-// })
+userRouter.route('/getUserDetails').get((req,res)=>{
+
+    User.findById(jwt.verify(req.header('authorization').split(' ')[1],process.env.JWT_SECRET_KEY).userID).populate('avatar').then((user)=>res.status(200).json(user)).catch((e)=>res.sendStatus(404))
+})
 module.exports=userRouter;

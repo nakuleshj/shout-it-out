@@ -1,4 +1,4 @@
-import React,{useState,useEffect,useRef} from 'react';
+import React,{useState,useEffect} from 'react';
 import Form from 'react-bootstrap/Form';
 import CustomNavbar from './customNavbar.component';
 import axios from 'axios';
@@ -13,6 +13,7 @@ export default function HomePage () {
     const [commentContent,setComment]=useState({});
     const [file,setFile]=useState(null);
     const [showPhotoUploadModal,setShowPhotoUploadModal]=useState(false);
+    document.title='ShoutItOut | Feed';
     function getPosts(isRefresh=false){
       
         axios.get('api/post',{
