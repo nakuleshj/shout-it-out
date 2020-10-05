@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react';
+import React,{useState,useEffect,useRef} from 'react';
 import Form from 'react-bootstrap/Form';
 import CustomNavbar from './customNavbar.component';
 import axios from 'axios';
@@ -6,7 +6,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import '../styling/HomePage.css';
 import Modal from 'react-bootstrap/Modal';
 export default function HomePage () {
-    const formData=new FormData();
+    const [pickedImage,setPickedImage]=useState('');
     const [newPostContent,setNewPostContent]=useState('');
     const [newImagePostContent,setNewImagePostContent]=useState('');
     const [posts,setPosts]=useState([]);
@@ -49,9 +49,10 @@ export default function HomePage () {
             });
         }}>
             <Modal.Header closeButton>
-                <Modal.Title></Modal.Title>
+                <Modal.Title>Post Image</Modal.Title>
             </Modal.Header>
             <Modal.Body>
+                <img src={pickedImage} alt='Picked' className='rounded img-fluid mb-1'/>
                 <textarea className='form-control tweet-area' rows='2' placeholder="What's on your mind?" style={{resize:'false'}} required onChange={(e)=>{
                     setNewImagePostContent(e.target.value)
                 }}/>
@@ -75,6 +76,20 @@ export default function HomePage () {
                         }).then((res)=>getPosts())
                         }}>
                             <InputGroup>
+                            <InputGroup.Prepend>
+                                    <button type='button' className='main-btn  border-right-0 rounded-left'><label className="attachFile">
+                        <input type='file' accept='.png,.jpg,.jpeg' onChange={(e)=>{
+                           
+                            if(e.target.files)
+                           {
+                            setFile(e.target.files[0]);   
+                            setShowPhotoUploadModal(true);
+                            setPickedImage(URL.createObjectURL(e.target.files[0]))
+                        }
+                        }}/>
+                        <i className='fa fa-camera'></i>
+                        </label></button>
+                                </InputGroup.Prepend>
                                 <textarea required type="textarea" className='form-control tweet-area' rows="2" placeholder="What's on your mind?" style={{ resize: 'none' }} onChange={(e)=>{
                                     
                                     setNewPostContent(e.target.value);
@@ -85,16 +100,7 @@ export default function HomePage () {
                                 </InputGroup.Append>
                             </InputGroup>
                         </Form>
-                        <label className="attachFile">
-                        <input type='file' accept='.png,.jpg,.jpeg' onChange={(e)=>{
-                            // console.log(e.target.files)
-                            if(e.target.files)
-                           {
-                            setFile(e.target.files[0]);   
-                            setShowPhotoUploadModal(true);}
-                        }}/>
-                        <i className='fa fa-camera'></i>
-                        </label>
+                        
                         {
                             posts.map(post=>
                             {
