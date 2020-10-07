@@ -6,7 +6,21 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+.main-btn{
+  background-color: #d8ff00;
+  border: 1px solid #343A40;
+  z-index: 1;
+}
+.reverse-main-btn{
+  color:#d8ff00;
+  background-color: #343A40;
+  border: 1px solid #343A40;
+}
+.main-btn:hover{
+  color:#d8ff00;
+  background-color: #343A40;
+  border: 1px solid #343A40;
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -14,4 +28,8 @@ code {
 
 .bg-main{
   background-color: #d8ff00;
+}
+input.site-input:focus{
+  border: 1px solid #343A40;
+  box-shadow: none;
 }

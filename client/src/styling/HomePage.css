@@ -1,15 +1,4 @@
-.main-btn{
-    padding:10px;
-    background-color: #d8ff00;
-    border: 1px solid #343A40;
-    z-index: 1;
-    margin-left:-1px;
-}
-.main-btn:hover{
-    color:#d8ff00;
-    background-color: #343A40;
-    border: 1px solid #343A40;
-}
+
 textarea.tweet-area{
     border-color: #343A40;
 }

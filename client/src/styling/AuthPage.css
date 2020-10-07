@@ -9,9 +9,7 @@ input.login-input:focus{
 .attachFile{
     cursor:pointer;
 }
-.reg-btn{
 
-}
 .attachFile input[type="file"]{
     display: none;
   /* position: absolute;

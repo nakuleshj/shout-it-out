@@ -59,7 +59,7 @@ export default function HomePage () {
                 }}/>
             </Modal.Body>
             <Modal.Footer>
-                <button className='btn-block'>Upload</button>
+                <button className='btn-block main-btn'>Upload</button>
             </Modal.Footer>
             </form>
         </Modal>
@@ -88,7 +88,7 @@ export default function HomePage () {
                             setPickedImage(URL.createObjectURL(e.target.files[0]))
                         }
                         }}/>
-                        <i className='fa fa-camera'></i>
+                        <i className='fa fa-paperclip text-large'></i>
                         </label></button>
                                 </InputGroup.Prepend>
                                 <textarea required type="textarea" className='form-control tweet-area' rows="2" placeholder="What's on your mind?" style={{ resize: 'none' }} onChange={(e)=>{

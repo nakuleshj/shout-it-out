@@ -15,7 +15,7 @@ app.use('/api/comment',commentRouter);
 app.use('/api/auth',userRouter);
 app.use('/api/post',postRouter);
 const uri=process.env.ATLAS_URI
-mongoose.connect(uri,{useNewUrlParser:true,useCreateIndex:true,useUnifiedTopology: true});
+mongoose.connect(uri,{useNewUrlParser:true,useCreateIndex:true,useUnifiedTopology: true,useFindAndModify:false});
 
     app.use(express.static(path.join(__dirname,'client/build')));
     app.get('*',(req,res)=>{

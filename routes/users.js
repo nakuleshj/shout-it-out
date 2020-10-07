@@ -44,6 +44,26 @@ userRouter.route('/register').post(upload.single('avatar'),async (req,res)=>{
         console.log(e.toString());
         res.status(500).json({'message':e.toString()})});
 });
+userRouter.route('/resetPassword').post(async (req,res)=>{
+    const userID=jwt.verify(req.header('authorization').split(' ')[1],process.env.JWT_SECRET_KEY).userID;
+    const user= await User.findById(userID);
+    if(bCrypt.compareSync(req.body.currentPassword,user.password))
+        User.findByIdAndUpdate(jwt.verify(req.header('authorization').split(' ')[1],process.env.JWT_SECRET_KEY).userID,{password:bCrypt.hashSync(req.body.newPassword)})
+        .then((user)=>{res.sendStatus(200)})
+        .catch((e)=>{res.sendStatus(500)});
+    else
+        res.sendStatus(400)
+})
+userRouter.route('/updateUser').post((req,res)=>{
+    User.findByIdAndUpdate(jwt.verify(req.header('authorization').split(' ')[1],process.env.JWT_SECRET_KEY).userID,{
+        fullname:req.body.newFullname,
+        email:req.body.newEmail
+    }).then(()=>{
+        res.sendStatus(200);
+    }).catch((e)=>{
+        res.sendStatus(500);
+    })
+})
 userRouter.route('/getUserDetails').get((req,res)=>{
 
     User.findById(jwt.verify(req.header('authorization').split(' ')[1],process.env.JWT_SECRET_KEY).userID).populate('avatar').then((user)=>res.status(200).json(user)).catch((e)=>res.sendStatus(404))
