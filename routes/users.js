@@ -53,7 +53,39 @@ userRouter.route('/resetPassword').post(async (req,res)=>{
         .catch((e)=>{res.sendStatus(500)});
     else
         res.sendStatus(400)
-})
+});
+userRouter.route('/follow/:followUserID').post((req,res)=>{
+    const userID=jwt.verify(req.header('authorization').split(' ')[1],JWT_SECRET_KEY).userID
+    User.findByIdAndUpdate(req.params.followUserID,{$push:{
+        'followers':userID
+    }}).then((user)=>{
+        User.findByIdAndUpdate(userID,{$push:{
+            following:req.params.followUserID
+        }}).then(()=>{
+            res.sendStatus(201);
+        }).catch((e)=>{
+            res.sendStatus(500)
+        })
+    }).catch((e)=>{
+        res.sendStatus(500)
+    })
+});
+userRouter.route('/unfollow/:unfollowUserID').post((req,res)=>{
+    const userID=jwt.verify(req.header('authorization').split(' ')[1],JWT_SECRET_KEY).userID;
+    User.findByIdAndUpdate(req.params.unfollowUserID,{$pull:{
+        'followers':userID
+    }}).then((user)=>{
+        User.findByIdAndUpdate(userID,{$pull:{
+            following:req.params.followUserID
+        }}).then(()=>{
+            res.sendStatus(201);
+        }).catch((e)=>{
+            res.sendStatus(500)
+        })
+    }).catch((e)=>{
+        res.sendStatus(500)
+    })
+});
 userRouter.route('/updateUser').post((req,res)=>{
     User.findByIdAndUpdate(jwt.verify(req.header('authorization').split(' ')[1],process.env.JWT_SECRET_KEY).userID,{
         fullname:req.body.newFullname,
@@ -65,7 +97,6 @@ userRouter.route('/updateUser').post((req,res)=>{
     })
 })
 userRouter.route('/getUserDetails').get((req,res)=>{
-
     User.findById(jwt.verify(req.header('authorization').split(' ')[1],process.env.JWT_SECRET_KEY).userID).populate('avatar').then((user)=>res.status(200).json(user)).catch((e)=>res.sendStatus(404))
 })
 module.exports=userRouter;

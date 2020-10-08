@@ -45,7 +45,6 @@ export default function AuthPage(){
                             if (e.target.files && e.target.files[0])
                             {
                                 setAvatarFile(e.target.files[0]);
-                                
                                 setPickedImage(URL.createObjectURL(e.target.files[0]));
                             }
                             

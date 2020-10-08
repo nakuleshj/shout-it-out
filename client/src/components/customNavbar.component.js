@@ -61,7 +61,7 @@ export default class CustomNavbar extends Component{
               <span className='text-danger' style={{display:this.state.passwordsMatch?'none':'block'}}>Passwords don't Match</span>
             </Modal.Body>
             <Modal.Footer>
-              <button className='main-btn btn-block'> Reset Password</button>
+              <button className='main-btn btn-block py-2'> Reset Password</button>
             </Modal.Footer>
             </form>
           </Modal>
