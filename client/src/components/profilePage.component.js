@@ -22,8 +22,8 @@ export default function ProfilePage(){
         <>
         <CustomNavbar/>
         <div className='fluid-container'>
-            <div className='row w-100'>
-                <div className='col-lg-4 mx-auto '>
+            <div className='row w-100 mx-auto'>
+                <div className='col-md-4 mx-auto'>
         <img src={user?'data:'+user.avatar.contentType+';base64,'+user.avatar.data:'./avatar.png'} alt='Profile Pic' width='150vw' className='mt-3 rounded d-block mx-auto'/>
         <label style={{cursor:"pointer"}} className='mx-auto d-block text-center'>
             <input type='file' className='d-none' />
