@@ -1,113 +1,54 @@
 import React,{useState,useEffect} from 'react';
-import Form from 'react-bootstrap/Form';
 import CustomNavbar from './customNavbar.component';
 import axios from 'axios';
 import InputGroup from 'react-bootstrap/InputGroup';
-import '../styling/HomePage.css';
-import Modal from 'react-bootstrap/Modal';
-
-export default function HomePage () {
-    const [pickedImage,setPickedImage]=useState('');
-    const [newPostContent,setNewPostContent]=useState('');
-    const [newImagePostContent,setNewImagePostContent]=useState('');
-    const [posts,setPosts]=useState([]);
+export default function ProfilePage(){
+    const [user,setUser]=useState(null);
+    const [posts,setPosts]=useState(null);
     const [commentContent,setComment]=useState({});
-    const [file,setFile]=useState(null);
-    const [showPhotoUploadModal,setShowPhotoUploadModal]=useState(false);
-    document.title='ShoutItOut | Feed';
-    function getPosts(isRefresh=false){
-      
-        axios.get('api/post',{
+    function getPosts(){
+        axios.get('/api/post/profilePosts',{
             headers:{
                 authorization:'Bearer '+localStorage.getItem('token')
             }
         }).then((res)=>{
-            setPosts([]);
-           
-            res.data.reverse().map((sentPost)=>
-            setPosts(prevState=>{return [...prevState,sentPost]})
-        )}).catch((e)=>console.log(e.toString()));
+            setPosts(res.data)
+        })
     }
-    useEffect(getPosts,[]);
-    return (
-        <>
-        <Modal show={showPhotoUploadModal} onHide={()=>{
-            setShowPhotoUploadModal(false);
-        }}><form onSubmit={(e)=>{
-            e.preventDefault();
-            const formData=new FormData();
-            const config={
+    useEffect(
+        ()=>{
+            document.title='ShoutItOut | Profile';
+            axios.get('/api/auth/getUserDetails',{
                 headers:{
-                    authorization:'Bearer '+localStorage.getItem('token'),
-                    'content-type': 'multipart/form-data'
+                    authorization:'Bearer '+localStorage.getItem('token')
                 }
-            };
-            formData.append('content',newImagePostContent)
-            formData.append('postImage',file);
-            axios.post('/api/post/media',formData,config).then((res)=>{
-                console.log(res.status);
-                setShowPhotoUploadModal(false);
+            }).then((res)=>{
+                setUser(res.data);
                 getPosts();
             });
-        }}>
-            <Modal.Header closeButton>
-                <Modal.Title>Post Image</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <img src={pickedImage} alt='Picked' className='rounded img-fluid mb-1'/>
-                <textarea className='form-control tweet-area' rows='2' placeholder="What's on your mind?" style={{resize:'false'}} required onChange={(e)=>{
-                    setNewImagePostContent(e.target.value)
-                }}/>
-            </Modal.Body>
-            <Modal.Footer>
-                <button className='btn-block main-btn'>Upload</button>
-            </Modal.Footer>
-            </form>
-        </Modal>
-            <CustomNavbar />
-            <div className='container-fluid'>
-                <div className='row'>
-                    <div className='col-lg-7 mx-auto'>
-                        <Form className='my-3' onSubmit={(e)=>{e.preventDefault();
-                        axios.post('api/post/add',{
-                            content:newPostContent
-                        },{
-                            headers:{
-                                authorization:'Bearer '+localStorage.getItem('token')
-                            }
-                        }).then((res)=>getPosts())
-                        }}>
-                            <InputGroup>
-                            <InputGroup.Prepend>
-                                    <button type='button' className='main-btn  border-right-0 rounded-left'><label className="attachFile">
-                        <input type='file' accept='.png,.jpg,.jpeg' onChange={(e)=>{
-                           
-                            if(e.target.files)
-                           {
-                            setFile(e.target.files[0]);   
-                            setShowPhotoUploadModal(true);
-                            setPickedImage(URL.createObjectURL(e.target.files[0]))
-                        }
-                        }}/>
-                        <i className='fa fa-paperclip text-large'></i>
-                        </label></button>
-                                </InputGroup.Prepend>
-                                <textarea required type="textarea" className='form-control tweet-area' rows="2" placeholder="What's on your mind?" style={{ resize: 'none' }} onChange={(e)=>{
-                                    
-                                    setNewPostContent(e.target.value);
-                                    
-                                }}/>
-                                <InputGroup.Append>
-                                    <button className='main-btn  border-left-0 rounded-right'>Shout It</button>
-                                </InputGroup.Append>
-                            </InputGroup>
-                        </Form>
-                        
+            
+        },[]
+    )
+    return (
+        <>
+        <CustomNavbar/>
+        <div className='container-fluid'>
+            <div className='row mt-3'>
+                {user?<div className='col-lg-8 mx-auto'>
+                        <div className='d-flex flex-row justify-content-between align-items-center mb-3 px-3'>
+                            <div className='d-flex flex-row'><img alt='Profile Pic' src={user.avatar?'data:'+user.avatar.contentType+';base64,'+user.avatar.data:'avatar.png'} className='rounded' width='100px'/>
+                            <div className='d-flex flex-column px-4'>
+                            <h3 className='mt-3 mb-1'>{user.fullname}</h3>
+                            <h6>{user.email}</h6>
+                            </div></div>
+                            <div className='d-flex flex-column text-center'><h3>{user.followers.length}</h3><h4>Followers</h4></div>
+                            <div className='d-flex flex-column text-center'><h3>{user.following.length}</h3><h4>Following</h4></div>
+                        </div>
                         {
-                            posts.map(post=>
+                            !posts?null:posts.map(post=>
                             {
                                 let timestamp=new Date(post.createdAt);
-                                return <div key={post._id} className='post-container rounded-lg shadow-lg bg-dark d-flex flex-column text-light mb-2' >
+                                return <div key={post._id} className='post-container rounded-lg shadow-lg bg-dark d-flex flex-column text-light mb-2 mx-3' >
                                 <div className='d-flex flex-row px-3 pt-2 border-dark'>
                                     <img src={post.postedBy.avatar?"data:"+post.postedBy.avatar.contentType+";base64,"+post.postedBy.avatar.data:'/avatar.png'} alt='Logo' className='rounded user-profile-pic mr-2' width="50" height="50" />
                                     <div className='d-flex flex-column pl-1'>
@@ -203,9 +144,9 @@ export default function HomePage () {
                             </div>
                         </div>
                     })}
-                    </div>
-                </div>
+                </div>:null}
             </div>
+        </div>
         </>
     );
 }

@@ -20,7 +20,13 @@ postRouter.use((req,res,next)=>{
         res.sendStatus(401);
     }
 });
-
+postRouter.route('/profilePosts').get((req,res)=>{
+      Post.find({postedBy:req.userID}).populate('imageRef').populate({path:'postedBy',populate:'avatar'}).populate({path:'comments',populate:'commentedBy'}).then((posts)=>{
+        res.status(200).json(posts);
+    }).catch((e)=>{
+        res.sendStatus(500);
+    })
+})
 postRouter.route('/media').post(upload.single('postImage'),(req,res)=>{
     console.log(req.file.path)
     var img = fs.readFileSync(req.file.path);

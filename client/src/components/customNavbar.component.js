@@ -66,18 +66,19 @@ export default class CustomNavbar extends Component{
             </form>
           </Modal>
             <Navbar style={{backgroundColor:'#d8ff00'}} bg='dark' variant="dark">
-            <Navbar.Brand href="/"><img src='/logo.png' alt='Logo' width="40"
-        height="40"
+            <Navbar.Brand href="/"><img src='/logo.png' alt='Logo' width="50vh"
+        height="50vh"
         className="d-inline-block align-top ml-4" /></Navbar.Brand>
             <Nav className="ml-auto mr-5">
               
               
-              <Dropdown>
-                <Dropdown.Toggle variant='dark'>
-              <img src={this.state.imageSrc===''?'./avatar.png':this.state.imageSrc} className='rounded border border-white mr-2' alt=' ' height='50vh'/></Dropdown.Toggle>
+              <Dropdown className='mr-2'>
+                
+                <Dropdown.Toggle split variant='dark'><img src={this.state.imageSrc===''?'./avatar.png':this.state.imageSrc} className='rounded border border-white mr-2' alt=' ' height='55vh' width='55vh'/></Dropdown.Toggle>
+              
               <Dropdown.Menu>
               <Dropdown.Item onClick={()=>{
-                window.location='/profile'
+                window.location='/editProfile'
               }}>Edit Profile</Dropdown.Item>
               <Dropdown.Item onClick={()=>{
                 this.setState({openResetPasswordModal:true})

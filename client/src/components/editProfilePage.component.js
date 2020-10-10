@@ -2,11 +2,11 @@ import CustomNavbar from './customNavbar.component';
 import React,{useEffect,useState} from 'react';
 import Axios from 'axios';
 
-export default function ProfilePage(){
+export default function EditProfilePage(){
     const [user,setUser]=useState(null);
     const [updatedEmail,setUpdatedEmail]=useState('');
     const [updatedName,setUpdatedName]=useState('');
-    document.title='ShoutItOut | Profile';
+    document.title='ShoutItOut | Edit Profile';
     useEffect(()=>{
         Axios.get('/api/auth/getUserDetails',{
             headers:{
