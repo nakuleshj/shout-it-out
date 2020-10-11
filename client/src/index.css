@@ -33,19 +33,3 @@ input.site-input:focus{
   border: 1px solid #343A40;
   box-shadow: none;
 }
-::-webkit-scrollbar {
-  width: 10px;
-  
-}
-
-::-webkit-scrollbar-track {
-  background: #343A40;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #d8ff00;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #b3cf1d;
-}
