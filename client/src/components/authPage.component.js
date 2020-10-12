@@ -13,7 +13,7 @@ export default function AuthPage(){
     const [avatarFile,setAvatarFile]=useState(null);
     document.title='ShoutItOut | Login/Register';
     return(
-        <div className='container-fluid h-100 login-background'>
+        <div className='container-fluid h-100'>
             <Modal show={openRegisterModal} onHide={()=>{
                 setOpenRegisterModal(false)
             }}>
@@ -63,11 +63,14 @@ export default function AuthPage(){
                     </form>
                 </Modal.Body>
             </Modal>
-            <div className='row h-100'>
-                <div className='col-md-6 my-2 mx-auto'>
+            <div className='row h-100 '>
+                {/* <div className='col-md-6 h-100'>
+                <img src='logo.png' className="img-fluid my-auto mx-auto d-block" width='200' height='200' alt='Shout It Out'/>
+                </div> */}
+                <div className='col-md-6 pt-5 bg-white mx-auto'>
                     <img src='logo.png' className="img-fluid mx-auto d-block" width='200' height='200' alt='Shout It Out'/>
                    
-                       <div className='bg-white p-5'>
+                       <div className='mx-5 p-5'>
                     <h1 className=''><strong>Login</strong></h1>
                     <form onSubmit={(e)=>{
                             e.preventDefault();
